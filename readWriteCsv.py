@@ -20,7 +20,7 @@ with open('test.csv', newline='') as File:
     newData = []
 
     for data in reader:
-        if data[0] != 'dni':
+        if data[0].upper() != 'DNI':
 
             if len(data[0]) == 7 or len(data[0]) == 8:
 
