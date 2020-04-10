@@ -1,4 +1,6 @@
-import csv 
+import csv
+import argparse
+import os
 
 cuilMultiplicators = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2]
 
@@ -14,35 +16,47 @@ def completeCuil(previusCuil, rest):
         
     return previusCuil[0:2] + '-' + previusCuil[2:] + '-' + str(11 - rest)
 
-with open('test.csv', newline='') as File:
-    reader = csv.reader(File)
+def loteCuils(fileCsv):
 
-    newData = []
+    with open(fileCsv, newline='') as File:
+        reader = csv.reader(File)
 
-    for data in reader:
-        if data[0].upper() != 'DNI':
+        newData = []
 
-            if len(data[0]) == 7 or len(data[0]) == 8:
+        for data in reader:
+            if data[0].upper() != 'DNI':
 
-                dni = '0' + data[0] if (len(data[0]) < 8) else data[0]
-                previusCuil = '20' + dni if (data[1] == 'M') else '27' + dni
+                if len(data[0]) == 7 or len(data[0]) == 8:
 
-                acumulator = 0
-                for element, digit in zip(cuilMultiplicators, previusCuil):
-                    acumulator += element * int(digit)
+                    dni = '0' + data[0] if (len(data[0]) < 8) else data[0]
+                    previusCuil = '20' + dni if (data[1] == 'M') else '27' + dni
 
-                data[2] = completeCuil(previusCuil, acumulator % 11)
+                    acumulator = 0
+                    for element, digit in zip(cuilMultiplicators, previusCuil):
+                        acumulator += element * int(digit)
 
-                newData.append(data)
+                    data[2] = completeCuil(previusCuil, acumulator % 11)
+
+                    newData.append(data)
+                else:
+                    newData.append(data)
+
             else:
                 newData.append(data)
 
-        else:
-            newData.append(data)
+        with open('result.csv', 'w') as writeFile:
 
-    with open('result.csv', 'w') as writeFile:
+            writer = csv.writer(writeFile, delimiter=',')
+            writer.writerows(newData)
+            print('Success!!!')
 
-        writer = csv.writer(writeFile, delimiter=',')
-        writer.writerows(newData)
+# Getting a cuil with dni and sex give.
+parser = argparse.ArgumentParser()
+parser.add_argument("-d", "--dni", help="número de documento (debe tener mínimo 7 dígitos)", type=int)
+parser.add_argument("-s", "--sex", help="F: femenino; M: masculino", type=str, choices=['F','M'])
+parser.add_argument("-f", "--file", help="ruta absoluta del archivo .csv con los datos", type=str)
 
+args = parser.parse_args()
 
+if args.file and os.path.isfile(args.file):
+    loteCuils(args.file)
