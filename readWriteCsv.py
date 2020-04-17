@@ -7,16 +7,25 @@ cuilMultiplicators = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2]
 def completeCuil(previusCuil, rest):
 
     if rest == 0:
-        return previusCuil[0:2] + '-' + previusCuil[2:] + '-0'
+        return previusCuil[0:2] + previusCuil[2:] + '0'
     elif rest == 1:
         if previusCuil[0:2] == '20':
-            return '23-' + previusCuil[2:] + '-9'
+            return '23' + previusCuil[2:] + '9'
         if previusCuil[0:2] == '27':
-            return '23-' + previusCuil[2:] + '-4'
+            return '23' + previusCuil[2:] + '4'
         
-    return previusCuil[0:2] + '-' + previusCuil[2:] + '-' + str(11 - rest)
+    return str(previusCuil[0:2]) + str(previusCuil[2:]) + str(11 - rest)
 
-def loteCuils(fileCsv):
+def cuilFormat(cuil, typeCuil):
+    if typeCuil == 'sin':
+        return cuil
+    if typeCuil == 'con':
+        return cuil[:2] + '-' + cuil[2:10] + '-' + cuil[10:]
+
+def loteCuils(parameters):
+
+    fileCsv = parameters.file
+    formatCuil = args.format
 
     with open(fileCsv, newline='') as File:
         reader = csv.reader(File)
@@ -35,7 +44,7 @@ def loteCuils(fileCsv):
                     for element, digit in zip(cuilMultiplicators, previusCuil):
                         acumulator += element * int(digit)
 
-                    data[2] = completeCuil(previusCuil, acumulator % 11)
+                    data[2] = cuilFormat(completeCuil(previusCuil, acumulator % 11), formatCuil)
 
                     newData.append(data)
                 else:
@@ -55,8 +64,9 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-d", "--dni", help="número de documento (debe tener mínimo 7 dígitos)", type=int)
 parser.add_argument("-s", "--sex", help="F: femenino; M: masculino", type=str, choices=['F','M'])
 parser.add_argument("-f", "--file", help="ruta absoluta del archivo .csv con los datos", type=str)
+parser.add_argument("-F", "--format", help="formato que debera tener el cuil/cuit, ['con','sin'] guiones", type=str, choices=['con','sin'], default='sin')
 
 args = parser.parse_args()
 
 if args.file and os.path.isfile(args.file):
-    loteCuils(args.file)
+    loteCuils(args)
