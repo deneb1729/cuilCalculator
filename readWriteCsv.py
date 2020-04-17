@@ -44,6 +44,8 @@ def loteCuils(parameters):
                     for element, digit in zip(cuilMultiplicators, previusCuil):
                         acumulator += element * int(digit)
 
+                    print(previusCuil, acumulator % 11)
+
                     data[2] = cuilFormat(completeCuil(previusCuil, acumulator % 11), formatCuil)
 
                     newData.append(data)
@@ -70,3 +72,5 @@ args = parser.parse_args()
 
 if args.file and os.path.isfile(args.file):
     loteCuils(args)
+if args.sex and args.dni:
+    print(args.sex, args.dni)
