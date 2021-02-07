@@ -9,7 +9,7 @@ ENV APP_HOME /usr/src
 
 WORKDIR $APP_HOME
 
-RUN pip install fastapi uvicorn[standard]
+RUN pip install uvicorn[standard]
 
 COPY app/ $APP_HOME/app
 EXPOSE 8000 $PORT
