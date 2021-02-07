@@ -1,0 +1,12 @@
+*.csv
+*.csv#
+**/__pycache__/
+**/.pytest_cache/
+.flake8
+.git*
+Makefile
+.pre-commit*
+pyproject.toml
+README*
+requirements.dev.txt
+**/tests/
