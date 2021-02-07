@@ -50,10 +50,8 @@ jobs:
           heroku_email: ${{secrets.HEROKU_EMAIL}}
           remote_branch: develop
           usedocker: true
-          docker_heroku_process_type: worker
           healthcheck: https://${{secrets.HEROKU_APP_NAME}}.herokuapp.com/api/healthcheck
           delay: 10
-          rollbackonhealthcheckfailed: true
           checkstring: "Successful 200 OK"
       - name: Success message
         run: echo Successfully Deploy.!
