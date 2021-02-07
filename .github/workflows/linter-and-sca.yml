@@ -50,7 +50,6 @@ jobs:
           heroku_email: ${{secrets.HEROKU_EMAIL}}
           useDocker: true
           healthcheck: https://${{secrets.HEROKU_APP_NAME}}.herokuapp.com/api/healthcheck
-          delay: 10
-          checkstring: "Successful 200 OK"
+          delay: 15
       - name: Success message
         run: echo Successfully Deploy.!
