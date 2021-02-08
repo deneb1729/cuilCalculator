@@ -9,9 +9,9 @@ ENV APP_HOME /usr/src
 
 WORKDIR $APP_HOME
 
-RUN pip install uvicorn[standard]
+RUN pip install fastapi uvicorn[standard]
 
-COPY app/ $APP_HOME/app
+COPY app $APP_HOME
 EXPOSE 8000 $PORT
 
-CMD uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 1
+CMD uvicorn main:app --host "0.0.0.0" --port $PORT --workers 1 --log-level "debug"
