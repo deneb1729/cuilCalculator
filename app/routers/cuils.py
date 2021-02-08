@@ -26,14 +26,49 @@ class ModelCuilOut(BaseCuil):
     cuil: int = Field(..., title="cuil/cuit number")
 
 
-@router.post("/cuils/", tags=["cuils"])
+@router.post(
+    "/cuils/",
+    tags=["cuils"],
+    responses={
+        200: {
+            "description": "Getting a unique cuil",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "message": "unique cuil",
+                        "data": {"dni_number": 12555159, "gener": "F", "cuil": 23125551591},
+                    }
+                }
+            },
+        },
+    },
+)
 async def unique_cuil(entry: BaseCuil, request: Request):
     cuil = generator(entry.dni_number, entry.gener.value)
     data = ModelCuilOut(**entry.dict(), cuil=cuil)
     return {"message": "unique cuil", "data": data}
 
 
-@router.post("/cuils/batch", tags=["cuils"])
+@router.post(
+    "/cuils/batch",
+    tags=["cuils"],
+    responses={
+        200: {
+            "description": "Getting a cuil list",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "message": "cuils list",
+                        "data": [
+                            {"dni_number": 36489026, "gener": "M", "cuil": 20364890266},
+                            {"dni_number": 35196499, "gener": "F", "cuil": 27351964990},
+                        ],
+                    }
+                }
+            },
+        },
+    },
+)
 async def cuil_list(entry: List[BaseCuil], request: Request):
     batch_data = []
     for e in entry:
